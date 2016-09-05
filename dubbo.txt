@@ -1,0 +1,59 @@
+http://my.oschina.net/wangnian/blog/668175
+
+
+D:\work\Dubbo\dubbo
+dubbox Web管理部署
+http://my.oschina.net/wangnian/blog/668175
+
+部署dubbo-admin:
+==============================================
+----------------1. 下载zookeeper注册中心----------------
+下载地址：http://www.apache.org/dyn/closer.cgi/zookeeper/  下载后解压即可，进入D:\apach-zookeeper-3.4.5\bin，
+cp conf/zoo_sample.cfg  conf/zoo.cfg
+双击zkServer.cmd启动注册中心服务。
+
+----------------2.DubboProvider工程, 运行Provider----------------
+
+----------------3.部署dubbo-admin:----------------
+git clone https://github.com/alibaba/dubbo.git
+cd dubbo
+mvn clean install -Dmaven.test.skip  
+
+put dubbo-admin.war to $TOMCAT/webapps/
+modify console account: dubbo-admin\WEB-INF\dubbo.properties
+http://localhost:8080/dubbo-admin/       root/root
+
+----------------4.DubboConsumer工程，运行Consumer----------------
+
+
+
+
+部署dubbo keeper
+==================================================================
+git clone https://github.com/dubboclub/dubbokeeper.git
+cd D:\work\Dubbo\dubbokeeper
+run install-mysql.bat
+
+部署dubbokeeper-server:
+本地数据库操作：（建库、建表）
+CREATE DATABASE IF NOT EXISTS dubbo_monitor default charset utf8 COLLATE utf8_general_ci; 
+CREATE TABLE `application` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `type` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `应用名词索引` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+在target目录下找到 /mysql-dubbokeeper-server/mysql-server/conf修改dubbo-mysql.properties配置
+修改mysql.ur/username/password
+run bin/start-mysql.bat
+
+部署dubbokeeper-ui
+复制target\mysql-dubbokeeper-ui\*.war到TOMCAT/WEBAPP
+解压之后修改WEB-INF\classes里的dubbo.properties配置文件: name,owner
+
+登录： 
+http://localhost:8080/dubbokeeper-ui-1.0.1
+
+
